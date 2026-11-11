@@ -1,0 +1,36 @@
+flowchart LR
+  MO([Merchant owners]) -- "ID, SSN, bank details" --> OP
+  MO -- "tickets, calls" --> SP
+  CH([Cardholders]) -- "card + device data" --> PP
+  WV([Website visitors]) -- "form fills" --> MK
+  WV -- "cookies, IP" --> ADS
+  EM([Employees and applicants]) -- "HR, applicant data" --> HR
+    OP[Onboarding portal + CRM]
+    PP[Payments platform]
+    FE[Fraud engine]
+    PO[Payouts + ERP]
+    SP[Support platform]
+    MK[Marketing automation]
+    HR[HRIS + applicant tracking]
+    DW[(Data warehouse)]
+  OP -- "bank details" --> PO
+  PP -- transactions --> FE
+  PP --> DW
+  FE --> DW
+    KYB[KYB screening]
+    CN[Card networks + acquiring bank]
+    DEV[Device intelligence]
+    BANK[Payout bank]
+    SUP[Support SaaS]
+    ADS[Analytics + ad-tech]
+    PAY[Payroll + background checks]
+  OP -- "identity data" --> KYB
+  PP -- "authorization, settlement" --> CN
+  FE -- "device signals" --> DEV
+  PO -- "payout files" --> BANK
+  SP --> SUP
+  HR --> PAY
+  classDef s fill:#f4cccc,stroke:#b33a3a,color:#1b2430
+  classDef v fill:#e8eef5,stroke:#4a6b8f,color:#1b2430,stroke-dasharray:4 3
+  class OP,PO,HR s
+  class KYB,CN,DEV,BANK,SUP,ADS,PAY v

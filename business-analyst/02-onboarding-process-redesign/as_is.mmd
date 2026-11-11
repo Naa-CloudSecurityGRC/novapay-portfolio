@@ -1,0 +1,30 @@
+flowchart LR
+  subgraph M[Merchant]
+    A([Submits web form]) 
+    J[Emails missing documents]
+  end
+  subgraph S[Sales]
+    B[Emails PDF application to Ops]
+  end
+  subgraph O[Onboarding Ops]
+    C[Re-keys data into CRM]
+    D{Documents complete?}
+    E[Emails merchant for missing docs]
+    K[Sets up account manually in processing platform]
+    L([Sends welcome email])
+  end
+  subgraph C2[Compliance]
+    F[Manual OFAC and beneficial-owner search]
+    G[Checks business registration on state website]
+  end
+  subgraph U[Underwriting]
+    H[Credit and risk review]
+    I{Approved?}
+  end
+  A --> B --> C --> D
+  D -- No, ~40% --> E --> J --> D
+  D -- Yes --> F --> G --> H --> I
+  I -- Yes --> K --> L
+  I -- No --> X([Decline letter])
+  classDef pain fill:#f4cccc,stroke:#b33a3a,color:#1b2430
+  class C,E,F,G pain

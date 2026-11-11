@@ -1,0 +1,25 @@
+flowchart LR
+  subgraph M[Merchant]
+    A([Applies in portal with required-field checks and document upload])
+  end
+  subgraph Sys[Onboarding platform]
+    B[Auto KYB: registration, OFAC, beneficial owners via API]
+    C{Risk score}
+    G[Auto-provisions account in processing platform]
+    H([Welcome email with login])
+  end
+  subgraph O[Onboarding analyst]
+    D[Reviews medium and high risk cases only]
+  end
+  subgraph Par[In parallel]
+    E[Compliance review of screening hits]
+    F[Underwriting credit review]
+  end
+  A --> B --> C
+  C -- Low risk, within policy --> G
+  C -- Medium or high --> D --> E & F
+  E & F --> I{Approved?}
+  I -- Yes --> G --> H
+  I -- No --> X([Decline with reason code])
+  classDef win fill:#d9ead3,stroke:#3c7a3c,color:#1b2430
+  class A,B,C,G win

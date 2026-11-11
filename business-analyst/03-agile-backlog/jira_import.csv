@@ -1,0 +1,119 @@
+Issue Id,Issue Type,Summary,Description,Priority,Story Points,Labels,Sprint,Parent Id
+NP-100,Epic,Automated vendor-review reminders,Automate reminders and escalations for third-party vendor reviews so 95% of Critical/High reviews finish on time. See BRD.,High,,tprm compliance,,
+NP-101,Story,Calculate review due dates from vendor tier,"As a TPRM analyst, I want each vendor's next review date calculated from its risk tier, so that I don't track due dates by hand.
+
+Acceptance criteria:
+Given a vendor with risk tier ""Medium"" and last review completed 2025-06-30
+When the vendor record is saved
+Then the next review date is 2027-06-30
+
+Traces to: FR-01",Highest,3,tprm reminders,NovaPay Sprint 1,NP-100
+NP-102,Story,Send pre-due reminders to vendor owners,"As a vendor owner, I want reminders 60, 30 and 7 days before my review is due and on the due date, so that I have time to complete it.
+
+Acceptance criteria:
+Given a Critical vendor with review due 2026-03-31 and status ""Not started""
+When the daily job runs on 2026-03-24
+Then the owner receives the ""7 days to due date"" reminder
+
+Traces to: FR-02, FR-03",Highest,5,tprm reminders,NovaPay Sprint 1,NP-100
+NP-103,Story,Escalate 7-day overdue reviews to owner's manager,"As the Head of TPRM, I want overdue reviews escalated to the owner's manager after 7 days, so that reviews don't stall.
+
+Acceptance criteria:
+Given a review due 2026-03-31 that is not complete
+When the daily job runs on 2026-04-07
+Then the owner's manager receives an escalation
+And the escalation is logged
+
+Traces to: FR-04",High,3,tprm reminders,NovaPay Sprint 1,NP-100
+NP-104,Story,Escalate 30-day overdue Critical/High reviews to TPRM head,"As the Head of TPRM, I want 30-day overdue Critical and High reviews escalated to me, so that I can act before an exam finding.
+
+Acceptance criteria:
+Given a High-tier review 30 days overdue
+When the daily job runs
+Then the Head of TPRM receives an escalation
+And Medium and Low tiers are not escalated to the Head of TPRM
+
+Traces to: FR-05",High,2,tprm reminders,NovaPay Sprint 1,NP-100
+NP-105,Story,Stop reminders when review is complete,"As a vendor owner, I want reminders to stop once my review is marked complete, so that I'm not sent irrelevant emails.
+
+Acceptance criteria:
+Given a review marked ""Complete""
+When the daily job runs
+Then no reminder or escalation is sent for that vendor
+
+Traces to: FR-06",High,2,tprm reminders,NovaPay Sprint 1,NP-100
+NP-106,Story,Pause reminders with reason and end date,"As a TPRM analyst, I want to pause reminders for a vendor with a reason and end date, so that vendors in offboarding aren't chased.
+
+Acceptance criteria:
+Given I pause reminders with reason ""Contract ending"" until 2026-05-01
+When the daily job runs on 2026-04-15
+Then no reminder is sent
+And reminders resume on 2026-05-02 if the review is still open
+
+Traces to: FR-07",Medium,3,tprm reminders,NovaPay Sprint 2,NP-100
+NP-107,Story,Immutable reminder and escalation log,"As an internal auditor, I want a read-only log of every reminder and escalation, so that I can test the control without email searches.
+
+Acceptance criteria:
+Given any reminder or escalation is sent
+Then the log records vendor ID, recipient, channel and timestamp
+And no user, including administrators, can edit or delete the entry
+
+Traces to: FR-08, NFR-02",Highest,5,tprm reminders,NovaPay Sprint 1,NP-100
+NP-108,Story,Overdue reviews dashboard,"As the Head of TPRM, I want a dashboard of upcoming, due and overdue reviews by tier and owner, so that I can report to the risk committee.
+
+Acceptance criteria:
+Given 1,000 vendors in the inventory
+When I open the dashboard
+Then it loads in under 3 seconds
+And I can filter by tier and owner
+
+Traces to: FR-09, NFR-04",High,8,tprm reminders,NovaPay Sprint 2,NP-100
+NP-109,Story,Dashboard drill-down to vendor record,"As a TPRM analyst, I want to click from a dashboard tile to the vendor list behind it, so that I can follow up quickly.
+
+Acceptance criteria:
+Given the dashboard shows 12 overdue High-tier reviews
+When I click the tile
+Then I see the 12 vendors with owner and days overdue
+
+Traces to: FR-09",Medium,3,tprm reminders,NovaPay Sprint 2,NP-100
+NP-110,Story,Export log and dashboard data to CSV,"As an internal auditor, I want to export the reminder log to CSV, so that I can select test samples.
+
+Acceptance criteria:
+Given I have the Auditor role
+When I export the reminder log for Q1
+Then I receive a CSV with every Q1 entry
+
+Traces to: FR-10",Medium,2,tprm reminders,NovaPay Sprint 2,NP-100
+NP-111,Story,Teams delivery preference,"As a vendor owner, I want to choose email or Microsoft Teams for reminders, so that I see them where I work.
+
+Acceptance criteria:
+Given my preference is ""Teams""
+When a reminder is due
+Then I receive it in Teams and not by email
+
+Traces to: FR-11",Low,5,tprm reminders,,NP-100
+NP-112,Story,Weekly digest for owners of many vendors,"As a vendor owner with more than 3 open reviews, I want one weekly digest, so that I'm not flooded with emails.
+
+Acceptance criteria:
+Given I own 5 vendors with open reviews
+When reminders are due in the same week
+Then I receive one digest listing all 5
+
+Traces to: FR-12",Low,5,tprm reminders,,NP-100
+NP-113,Story,Daily reminder job reliability and alerting,"As the GRC platform lead, I want the daily job to finish by 07:00 ET and alert on failure, so that reminders are never silently missed.
+
+Acceptance criteria:
+Given the daily job fails
+When 07:00 ET passes
+Then the platform team receives an alert
+And the job can be re-run without sending duplicates
+
+Traces to: NFR-01",High,3,tprm reminders,NovaPay Sprint 1,NP-100
+NP-114,Story,Role-based access for pause and date edits,"As the Head of TPRM, I want only the TPRM role to pause reminders or change due dates, so that the control can't be bypassed.
+
+Acceptance criteria:
+Given I sign in through SSO without the TPRM role
+When I try to pause reminders
+Then the action is blocked and logged
+
+Traces to: NFR-03",High,3,tprm reminders,NovaPay Sprint 1,NP-100
